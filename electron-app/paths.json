@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "app/components/*": ["src/app/components/*"],
+      "app/pages/*": ["src/app/pages/*"],
+      "app/*": ["src/app/*"],
+
+      "core/utils/*": ["./src/core/utils/*"],
+      "core/decorators/*": ["src/core/utils/decorators/*"],
+      "core/application": ["src/core/src/application"],
+      "core/listeners": ["src/core/src/listeners/index"],
+      "core/registerEvents": ["src/core/utils/registerEvents"]
+    }
+  }
+}
