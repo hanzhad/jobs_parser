@@ -6,25 +6,18 @@ import PuppeteerService from 'core/utils/PuppeteerService';
 
 @Controller('Puppeteer')
 export default class PuppeteerListener {
+  test = 'string';
+
   @Listener('init')
   async init(event: IpcMainInvokeEvent, pageUrl: string) {
-    try {
-      const puppeteerService = PuppeteerService.getInstance();
-      await puppeteerService.init(pageUrl);
-
-      return {};
-    } catch (e) {
-      return { error: e.name };
-    }
+    console.log('this', this.test);
+    const puppeteerService = PuppeteerService.getInstance();
+    return await puppeteerService.createPage(pageUrl);
   }
 
   @Listener('close')
   async close() {
-    try {
-      const puppeteerService = PuppeteerService.getInstance();
-      await puppeteerService.close();
-    } catch (e) {
-      return { error: e.name };
-    }
+    const puppeteerService = PuppeteerService.getInstance();
+    await puppeteerService.close();
   }
 }

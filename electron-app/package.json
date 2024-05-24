@@ -25,7 +25,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
@@ -39,6 +40,7 @@
     "@electron/fuses": "^1.8.0",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",

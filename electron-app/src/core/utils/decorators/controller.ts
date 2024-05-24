@@ -1,4 +1,4 @@
-import { ipcMain, ipcRenderer } from 'electron';
+import { ipcMain } from 'electron';
 
 export default function Controller(domain: string) {
   return function(target: new (...arg: any[]) => any): {
@@ -7,6 +7,10 @@ export default function Controller(domain: string) {
     __execution_methods: Record<string, string>
   } {
     const prototype = target.prototype;
+    const obj = Object.create(prototype);
+
+    console.log('obj', Object.getOwnPropertyNames(obj));
+    console.log('prototype', Object.getOwnPropertyNames(prototype));
 
     const listenerMethods = Object
       .getOwnPropertyNames(prototype)
@@ -23,8 +27,12 @@ export default function Controller(domain: string) {
       }
 
       const eventName = `${domain}:${listerName}`;
+      console.log('Controller obj', obj);
+      console.log('Controller target', target);
+      //@ts-ignore
+      console.log('Controller target', target.prototype);
 
-      ipcMain.handle(eventName, method);
+      ipcMain.handle(eventName, (...args: any) => method.apply(target, args));
       executionMethods[methodName] = eventName;
     });
 

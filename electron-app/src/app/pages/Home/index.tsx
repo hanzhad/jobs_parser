@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { FormEventHandler } from 'react';
+import { FormEvent, FormEventHandler } from 'react';
 import mainProcessEventsApi from 'app/eventsApi';
 import { Button, Input } from '@mui/material';
 
@@ -10,10 +10,14 @@ const Home = () => {
     e.stopPropagation();
     e.preventDefault();
 
-    const url = (e.target as any).elements.url.value;
+    const form = e.target as HTMLFormElement;
+
+    const url = (form.elements.namedItem('url') as { value: string }).value;
     console.log('url', url);
     const result = await mainProcessEventsApi.PuppeteerListener.init(url);
     console.log('result', result);
+
+    form.reset();
   };
 
   const handleClose = async () => {
@@ -28,6 +32,7 @@ const Home = () => {
       <form onSubmit={handleFormSubmit}>
         <Input
           name='url'
+          defaultValue="https://"
         />
         <Button variant='outlined' type='submit'>Read</Button>
         <Button

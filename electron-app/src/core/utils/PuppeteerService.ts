@@ -1,9 +1,15 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { v4 as uuid } from 'uuid';
 
 export default class PuppeteerService {
   private static instance: PuppeteerService;
   private browser: Browser;
-  public page: Page;
+  private pages = new Map<string, Page>();
+
+  private browserDefaultConfig = {
+    headless: false,
+    args: ['--remote-debugging-port=9222'] // Specify the debugging port
+  };
 
   private constructor() {
   }
@@ -16,32 +22,37 @@ export default class PuppeteerService {
     return PuppeteerService.instance;
   }
 
-  async init(url: string, devtools?: boolean) {
-    if (this.browser) {
-      // todo
-      throw new Error('browser');
+  private async getBrowserInstance(devtools?: boolean) {
+    if (!this.browser) {
+      this.browser = await puppeteer.launch({
+        ...this.browserDefaultConfig,
+        devtools
+      });
     }
 
-    if (this.page) {
-      // todo
-      throw new Error('page');
+    return this.browser;
+  }
+
+  async createPage(url: string, devtools?: boolean) {
+    await this.getBrowserInstance(devtools);
+
+    const page = await this.browser.newPage();
+
+    await page.goto(url);
+
+    const pageId = uuid();
+    const title = await page.title();
+
+    return {
+      id: pageId,
+      title,
+      url,
     }
-
-    this.browser = await puppeteer.launch({
-      headless: false,
-      devtools,
-      args: ['--remote-debugging-port=9222'] // Specify the debugging port
-    });
-
-    this.page = await this.browser.newPage();
-
-    await this.page.goto(url);
   }
 
   async close() {
     await this.browser.close();
     this.browser = undefined;
-    this.page = undefined;
   }
 }
 
